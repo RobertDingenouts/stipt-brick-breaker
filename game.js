@@ -31,7 +31,7 @@ let level = 1;
 let isGameRunning = false;
 let isPaused = false;
 let bulletIntervalId;
-let brickSpeed = 0.3; // Start snelheid stenen
+let brickSpeed = 0.25; // Start snelheid stenen
 let brickOffsetY = 0;
 const brickWidth = 80;
 const brickHeight = 30;
@@ -219,7 +219,7 @@ function gameLoop() {
     // Level up check
     if (score >= level * levelUpScore && level < 10) {
         level++;
-        brickSpeed += 0.05;
+        brickSpeed += 0.023;
         document.getElementById('level').textContent = `Level: ${level}`;
     }
 
@@ -288,7 +288,7 @@ function startGame() {
     brickOffsetY = 0;
     level = 1;
     score = 0;
-    brickSpeed = 0.3;
+    brickSpeed = 0.25;
     bulletSpeed = 15;
     bricks = [];
     bullets = [];
