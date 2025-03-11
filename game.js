@@ -143,7 +143,7 @@ function activatePowerup() {
     }, 100); // Schiet elke 100ms (2x zo snel als normaal)
     if (powerupTimer) clearTimeout(powerupTimer);
     powerupTimer = setTimeout(() => {
-        bulletSpeed = 5; // Terug naar normale snelheid
+        bulletSpeed = 15; // Terug naar normale snelheid
         clearInterval(bulletIntervalId); // Stop het snelle interval
         bulletIntervalId = setInterval(() => { // Terug naar normaal interval
             if (isGameRunning && !isPaused) {
