@@ -19,8 +19,9 @@ const warningSound = new Audio('assets/warning.mp3');
 // Canvas setup
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-canvas.width = 800; // Vaste breedte voor consistentie
-canvas.height = window.innerHeight * 0.8; // Relatieve hoogte
+canvas.width = 800; // Logische breedte
+canvas.style.width = '800px'; // Visuele breedte
+canvas.height = window.innerHeight * 0.8;
 
 // Spelvariabelen
 let bullets = [];
@@ -52,17 +53,33 @@ const shooter = {
 };
 
 // Muis- en touchpositie
-let mouseX = shooter.x + shooter.width / 2;
+let mouseX = shooter.x + shooter.width / 2; // Start in het midden
 
+// Muisbeweging
 canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
-    mouseX = e.clientX - rect.left;
+    const scaleX = canvas.width / rect.width; // Schaling corrigeren
+    mouseX = Math.max(0, Math.min((e.clientX - rect.left) * scaleX, canvas.width));
 });
 
-canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault(); // Voorkomt scrollen en zoomen
+// Touchbediening
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
     const rect = canvas.getBoundingClientRect();
-    mouseX = e.touches[0].clientX - rect.left;
+    const scaleX = canvas.width / rect.width; // Schaling corrigeren
+    mouseX = Math.max(0, Math.min((e.touches[0].clientX - rect.left) * scaleX, canvas.width));
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width; // Schaling corrigeren
+    mouseX = Math.max(0, Math.min((e.touches[0].clientX - rect.left) * scaleX, canvas.width));
+}, { passive: false });
+
+canvas.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    // Laat mouseX staan waar hij is, shooter stopt
 }, { passive: false });
 
 // Maak bakstenen
