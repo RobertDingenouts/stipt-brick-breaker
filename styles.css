@@ -1,75 +1,54 @@
+/* Algemene stijlen */
 body {
+    background-color: #FFFFFF; /* Witte achtergrond voor de pagina */
     margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #000;
-    font-family: 'Press Start 2P', cursive;
-    color: #fff;
-}
-
-#gameContainer {
-    position: relative;
-}
-
-#gameCanvas {
-    border: 2px solid #fff;
-    background-color: #fff;
-}
-
-#ui {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    padding: 20px;
+    font-family: Arial, sans-serif; /* Strakke, moderne lettertype */
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    align-items: center;
 }
 
-#score, #level {
-    font-size: 16px;
-    color:#000
+/* Canvas */
+#gameCanvas {
+    background-color: #FFFFFF; /* Witte achtergrond voor het spel */
+    border: 2px solid #5A5A5A; /* Stipt-grijs voor de rand */
+    box-shadow: 0 0 10px #5A5A5A;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #00ff00;
-    color: #000;
+/* Knoppen */
+#startButton, #pauseButton, #resetButton {
+    background-color: #E18B22; /* Stipt-oranje knoppen */
+    color: #FFFFFF; /* Witte tekst */
     border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
     cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
 }
 
-button:hover {
-    background-color: #00cc00;
+#startButton:hover, #pauseButton:hover, #resetButton:hover {
+    background-color: #C9771D; /* Donkerder Stipt-oranje bij hover */
 }
 
+/* Verborgen elementen */
+#pauseButton, #resetButton, #gameCanvas, #winMessage {
+    display: none; /* Houdt de standaard logica van game.js */
+}
+
+/* Score en level tekst */
+#score, #level {
+    color: #5A5A5A; /* Stipt-grijs voor tekst */
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+/* Winstbericht */
 #winMessage {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    color: #E18B22; /* Stipt-oranje tekst */
     font-size: 24px;
+    font-weight: bold;
     text-align: center;
-    color: #ff00ff;
-    text-shadow: 2px 2px #00ffff;
-}
-
-@media (max-width: 600px) {
-    #ui {
-        top: 5px;
-        left: 5px;
-    }
-    button {
-        padding: 5px 10px;
-        font-size: 12px;
-    }
-    #score, #level {
-        font-size: 12px;
-    }
-    #winMessage {
-        font-size: 18px;
-    }
 }
