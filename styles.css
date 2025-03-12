@@ -16,7 +16,7 @@ body {
 
 #gameCanvas {
     border: 2px solid #fff;
-    background-color: #111;
+    background-color: #fff;
 }
 
 #ui {
@@ -30,6 +30,7 @@ body {
 
 #score, #level {
     font-size: 16px;
+    color:#000
 }
 
 button {

@@ -94,6 +94,8 @@ function createBoss() {
         hitsLeft: bossHitsRequired,
         visible: true
     };
+    warningSound.pause(); // Stop waarschuwingsgeluid bij spawnen eindbaas
+    warningSound.currentTime = 0;
 }
 
 // Powerup klasse
@@ -130,28 +132,28 @@ class Bullet {
     }
 }
 
-// Activeer powerup (snellere kogels én sneller schieten)
+// Activeer powerup
 function activatePowerup() {
     bulletSpeed = 15; // Snellere kogels
-    clearInterval(bulletIntervalId); // Stop het huidige schietinterval
-    bulletIntervalId = setInterval(() => { // Start een sneller interval
+    clearInterval(bulletIntervalId);
+    bulletIntervalId = setInterval(() => {
         if (isGameRunning && !isPaused) {
             bullets.push(new Bullet(shooter.x + shooter.width / 2 - 5, shooter.y));
             let shootClone = new Audio(shootSound.src);
             shootClone.play();
         }
-    }, 100); // Schiet elke 100ms (2x zo snel als normaal)
+    }, 100); // Schiet elke 100ms
     if (powerupTimer) clearTimeout(powerupTimer);
     powerupTimer = setTimeout(() => {
-        bulletSpeed = 15; // Terug naar normale snelheid
-        clearInterval(bulletIntervalId); // Stop het snelle interval
-        bulletIntervalId = setInterval(() => { // Terug naar normaal interval
+        bulletSpeed = 5;
+        clearInterval(bulletIntervalId);
+        bulletIntervalId = setInterval(() => {
             if (isGameRunning && !isPaused) {
                 bullets.push(new Bullet(shooter.x + shooter.width / 2 - 5, shooter.y));
                 let shootClone = new Audio(shootSound.src);
                 shootClone.play();
             }
-        }, 200); // Terug naar 200ms
+        }, 200);
     }, powerupDuration);
     let powerupClone = new Audio(powerupSound.src);
     powerupClone.play();
@@ -166,7 +168,9 @@ function gameLoop() {
     shooter.x = mouseX - shooter.width / 2;
     if (shooter.x < 0) shooter.x = 0;
     if (shooter.x + shooter.width > canvas.width) shooter.x = canvas.width - shooter.width;
-    ctx.drawImage(logoImg, shooter.x, shooter.y, shooter.width, shooter.height);
+    if (logoImg.complete && logoImg.naturalWidth !== 0) {
+        ctx.drawImage(logoImg, shooter.x, shooter.y, shooter.width, shooter.height);
+    }
 
     // Beweeg stenen
     brickOffsetY += brickSpeed;
@@ -174,14 +178,18 @@ function gameLoop() {
     // Update en teken kogels
     bullets.forEach((bullet, index) => {
         bullet.update();
-        bullet.draw();
+        if (orangeDotImg.complete && orangeDotImg.naturalWidth !== 0) {
+            bullet.draw();
+        }
         if (bullet.y < 0) bullets.splice(index, 1);
     });
 
     // Update en teken powerups
     powerups.forEach((powerup, index) => {
         powerup.update();
-        powerup.draw();
+        if (powerupImg.complete && powerupImg.naturalWidth !== 0) {
+            powerup.draw();
+        }
         if (powerup.y > canvas.height) powerups.splice(index, 1);
         if (powerup.x < shooter.x + shooter.width &&
             powerup.x + powerup.width > shooter.x &&
@@ -193,10 +201,12 @@ function gameLoop() {
     });
 
     // Teken stenen en check botsingen
-    bricks.forEach((brick) => {
+    bricks.forEach((brick, index) => {
         if (brick.visible) {
             const drawY = brick.baseY + brickOffsetY;
-            ctx.drawImage(baksteenImg, brick.x, drawY, brick.width, brick.height);
+            if (baksteenImg.complete && baksteenImg.naturalWidth !== 0) {
+                ctx.drawImage(baksteenImg, brick.x, drawY, brick.width, brick.height);
+            }
 
             bullets.forEach((bullet, bIndex) => {
                 if (bullet.x < brick.x + brick.width &&
@@ -223,8 +233,8 @@ function gameLoop() {
         document.getElementById('level').textContent = `Level: ${level}`;
     }
 
-    // Waarschuwingsgeluid
-    if (isGameRunning && bricks.some(brick => brick.visible && (brick.baseY + brickOffsetY + brick.height) >= warningHeight)) {
+    // Waarschuwingsgeluid (alleen als geen eindbaas)
+    if (isGameRunning && !boss && bricks.some(brick => brick.visible && (brick.baseY + brickOffsetY + brick.height) >= warningHeight)) {
         warningSound.play();
     } else {
         warningSound.pause();
@@ -234,11 +244,16 @@ function gameLoop() {
     // Check of alle stenen weg zijn en spawn eindbaas
     if (bricks.every(brick => !brick.visible) && !boss) {
         createBoss();
+        bricks = []; // Verwijder stenenarray
     }
 
     // Teken en update eindbaas
     if (boss && boss.visible) {
-        ctx.drawImage(bossImg, boss.x, boss.y, boss.width, boss.height);
+        if (bossImg.complete && bossImg.naturalWidth !== 0) {
+            ctx.drawImage(bossImg, boss.x, boss.y, boss.width, boss.height);
+        } else {
+            console.error("Boss image failed to load");
+        }
         bullets.forEach((bullet, bIndex) => {
             if (bullet.x < boss.x + boss.width &&
                 bullet.x + bullet.width > boss.x &&
@@ -289,7 +304,7 @@ function startGame() {
     level = 1;
     score = 0;
     brickSpeed = 0.25;
-    bulletSpeed = 15;
+    bulletSpeed = 5;
     bricks = [];
     bullets = [];
     powerups = [];
@@ -301,7 +316,7 @@ function startGame() {
             let shootClone = new Audio(shootSound.src);
             shootClone.play();
         }
-    }, 200); // Normaal schietinterval
+    }, 200);
     gameLoop();
 }
 
@@ -313,8 +328,8 @@ function resetGame() {
     if (powerupTimer) clearTimeout(powerupTimer);
     score = 0;
     level = 1;
-    brickSpeed = 0.3;
-    bulletSpeed = 15;
+    brickSpeed = 0.25;
+    bulletSpeed = 5;
     bricks = [];
     bullets = [];
     powerups = [];
