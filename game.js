@@ -19,8 +19,8 @@ const warningSound = new Audio('assets/warning.mp3');
 // Canvas setup
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth * 0.9;
-canvas.height = window.innerHeight * 0.8;
+canvas.width = 800; // Vaste breedte voor consistentie
+canvas.height = window.innerHeight * 0.8; // Relatieve hoogte
 
 // Spelvariabelen
 let bullets = [];
@@ -51,16 +51,19 @@ const shooter = {
     height: 50
 };
 
-// Muispositie
+// Muis- en touchpositie
 let mouseX = shooter.x + shooter.width / 2;
+
 canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
     mouseX = e.clientX - rect.left;
 });
+
 canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault(); // Voorkomt scrollen en zoomen
     const rect = canvas.getBoundingClientRect();
     mouseX = e.touches[0].clientX - rect.left;
-});
+}, { passive: false });
 
 // Maak bakstenen
 function createBricks() {

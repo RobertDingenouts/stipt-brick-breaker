@@ -52,3 +52,25 @@ body {
     font-weight: bold;
     text-align: center;
 }
+
+/* Centreer de canvas */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+}
+
+/* Voorkom zoomen en scrollen op mobiel */
+html, body {
+    touch-action: manipulation; /* Voorkomt inzoomen bij dubbele tik */
+    overflow: hidden; /* Voorkomt scrollen */
+    height: 100%;
+}
+
+#gameCanvas {
+    max-width: 100%; /* Zorgt dat de canvas niet breder is dan het scherm */
+    border: 2px solid #5A5A5A; /* Optioneel: visuele rand */
+}
