@@ -3,7 +3,7 @@
 Welkom bij **Stipt Brick Breaker**, een klassiek breakout-spel met een moderne Stipt-twist! Vernietig alle bakstenen, versla de eindbaas (een betonblok), en behaal de hoogste score. Dit spel is speelbaar op zowel pc als mobiele apparaten.
 
 ## Over het spel
-In Stipt Brick Breaker bestuur je een schieter die bakstenen vernietigt door kogels af te vuren. Er is een betonblok als eindbaas dat vanaf het begin aanwezig is en mee naar beneden beweegt. Je wint door het betonblok 20 keer te raken, maar verliest als het betonblok of de bakstenen jouw schieter raken.
+In Stipt Brick Breaker bestuur je een schieter die bakstenen vernietigt door kogels af te vuren. Er is een betonblok als eindbaas dat vanaf het begin aanwezig is en mee naar beneden beweegt. Je wint door het betonblok 40 keer te raken, maar verliest als het betonblok of de bakstenen jouw schieter raken.
 
 ### Kenmerken
 - **Consistente gameplay**: Het spel werkt op zowel pc als mobiel, met een vaste canvasbreedte van 800px voor een uniforme ervaring.
@@ -67,10 +67,10 @@ In Stipt Brick Breaker bestuur je een schieter die bakstenen vernietigt door kog
 - Voeg animaties toe aan het betonblok bij elke treffer.
 
 ## Credits
-- Ontwikkeld door [jouw naam].
+- Ontwikkeld door Robert Dingenouts.
 - Gebouwd met HTML5 Canvas, JavaScript, en CSS.
 - Geïnspireerd door klassieke breakout-spellen, met een Stipt-thema.
 
 ## Licentie
-© 2025 [jouw naam]. Alle rechten voorbehouden.  
-Dit spel en de bijbehorende code mogen niet worden gebruikt, gekopieerd, aangepast, of verspreid zonder expliciete schriftelijke toestemming van de maker. Voor gebruiksverzoeken, neem contact op met [jouw contactgegevens].
+© 2025 Robert Dingenouts. Alle rechten voorbehouden.  
+Dit spel en de bijbehorende code mogen niet worden gebruikt, gekopieerd, aangepast, of verspreid zonder expliciete schriftelijke toestemming van de maker. Voor gebruiksverzoeken, neem contact op met robertdingenouts@gmail.com
