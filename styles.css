@@ -14,6 +14,7 @@ body {
     background-color: #FFFFFF; /* Witte achtergrond voor het spel */
     border: 2px solid #5A5A5A; /* Stipt-grijs voor de rand */
     box-shadow: 0 0 10px #5A5A5A;
+    position: relative; /* Zodat winMessage hierop centreert */
 }
 
 /* Knoppen */
@@ -51,6 +52,11 @@ body {
     font-size: 24px;
     font-weight: bold;
     text-align: center;
+    position: absolute; /* Centreer op canvas */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
 }
 
 /* Centreer de canvas */

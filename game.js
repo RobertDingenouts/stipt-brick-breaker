@@ -37,7 +37,7 @@ let brickOffsetY = 0;
 const brickWidth = 80;
 const brickHeight = 30;
 let boss = null;
-const bossHitsRequired = 20;
+const bossHitsRequired = 80;
 let bulletSpeed = 5; // Start kogel snelheid
 let powerupTimer = null;
 const powerupDuration = 10000; // 10 seconden
@@ -106,7 +106,7 @@ function createBricks() {
 
 // Maak eindbaas
 function createBoss() {
-    const topBrickY = bricks.length > 0 ? Math.min(...bricks.map(brick => brick.baseY)) - 50 : 0; // Fallback naar 0 als geen stenen
+    const topBrickY = bricks.length > 0 ? Math.min(...bricks.map(brick => brick.baseY)) - 50 : 0; // Boven de hoogste steen
     boss = {
         x: 0,
         y: topBrickY,
@@ -263,55 +263,48 @@ function gameLoop() {
         warningSound.currentTime = 0;
     }
 
-    // Check of alle stenen weg zijn en spawn eindbaas
-    if (bricks.every(brick => !brick.visible) && !boss) {
-        console.log("Alle stenen onzichtbaar, spawn boss");
-        createBoss();
-        bricks = []; // Ruim stenen op om interferentie te voorkomen
+    // Teken en update eindbaas
+if (boss && boss.visible) {
+    const bossY = boss.y + brickOffsetY; // Beweegt mee met stenen
+    if (bossImg.complete && bossImg.naturalWidth !== 0) {
+        ctx.drawImage(bossImg, boss.x, bossY, boss.width, boss.height);
+    } else {
+        console.error("Boss image failed to load");
     }
 
-    // Teken en update eindbaas
-    if (boss && boss.visible) {
-        const bossY = boss.y + brickOffsetY; // Beweegt mee met stenen
-        if (bossImg.complete && bossImg.naturalWidth !== 0) {
-            ctx.drawImage(bossImg, boss.x, bossY, boss.width, boss.height);
-        } else {
-            console.error("Boss image failed to load");
-        }
-    
-        // Check botsingen met kogels
-        bullets.forEach((bullet, bIndex) => {
-            if (bullet.x < boss.x + boss.width &&
-                bullet.x + bullet.width > boss.x &&
-                bullet.y < bossY + boss.height &&
-                bullet.y + bullet.height > bossY) {
-                bullets.splice(bIndex, 1);
-                boss.hitsLeft--;
-                let breakClone = new Audio(breakSound.src);
-                breakClone.play();
-                if (boss.hitsLeft <= 0) {
-                    boss.visible = false;
-                    isGameRunning = false;
-                    clearInterval(bulletIntervalId);
-                    document.getElementById('winMessage').style.display = 'block';
-                    document.getElementById('resetButton').style.display = 'block';
-                    console.log("Boss verslagen, je wint!");
-                    return;
-                }
+    // Check botsingen met kogels
+    bullets.forEach((bullet, bIndex) => {
+        if (bullet.x < boss.x + boss.width &&
+            bullet.x + bullet.width > boss.x &&
+            bullet.y < bossY + boss.height &&
+            bullet.y + bullet.height > bossY) {
+            bullets.splice(bIndex, 1);
+            boss.hitsLeft--;
+            let breakClone = new Audio(breakSound.src);
+            breakClone.play();
+            if (boss.hitsLeft <= 0) {
+                boss.visible = false;
+                isGameRunning = false;
+                clearInterval(bulletIntervalId);
+                document.getElementById('winMessage').style.display = 'block';
+                document.getElementById('resetButton').style.display = 'block';
+                console.log("Boss verslagen, je wint!");
+                return;
             }
-        });
-    
-        // Game over als betonblok de shooter raakt
-        if (bossY + boss.height >= shooter.y) {
-            isGameRunning = false;
-            clearInterval(bulletIntervalId);
-            warningSound.pause();
-            alert(`Game Over! Score: ${score}`);
-            document.getElementById('resetButton').style.display = 'block';
-            console.log("Boss raakt shooter, game over");
-            return;
         }
+    });
+
+    // Game over als betonblok de shooter raakt
+    if (bossY + boss.height >= shooter.y) {
+        isGameRunning = false;
+        clearInterval(bulletIntervalId);
+        warningSound.pause();
+        alert(`Game Over! Score: ${score}`);
+        document.getElementById('resetButton').style.display = 'block';
+        console.log("Boss raakt shooter, game over");
+        return;
     }
+}
 
     // Update score
     document.getElementById('score').textContent = `Score: ${score}`;
@@ -331,30 +324,27 @@ function gameLoop() {
 
 // Start spel
 function startGame() {
+    if (isGameRunning) return;
     isGameRunning = true;
-    isPaused = false;
     document.getElementById('startButton').style.display = 'none';
-    document.getElementById('gameCanvas').style.display = 'block';
     document.getElementById('pauseButton').style.display = 'block';
-    document.getElementById('resetButton').style.display = 'none';
-    document.getElementById('winMessage').style.display = 'none';
-    brickOffsetY = 0;
-    level = 1;
+    document.getElementById('gameCanvas').style.display = 'block';
+    document.getElementById('score').style.display = 'block';
+    document.getElementById('level').style.display = 'block';
     score = 0;
-    brickSpeed = 0.25;
-    bulletSpeed = 5;
+    level = 1;
+    brickSpeed = 0.4;
+    brickOffsetY = 0;
     bricks = [];
     bullets = [];
     powerups = [];
-    boss = null;
+    boss = null; // Reset boss
     createBricks();
+    createBoss(); // Spawn boss aan het begin
+    shooter.x = canvas.width / 2 - 25;
     bulletIntervalId = setInterval(() => {
-        if (isGameRunning && !isPaused) {
-            bullets.push(new Bullet(shooter.x + shooter.width / 2 - 5, shooter.y));
-            let shootClone = new Audio(shootSound.src);
-            shootClone.play();
-        }
-    }, 200);
+        bullets.push(new Bullet(shooter.x + shooter.width / 2 - 5, shooter.y));
+    }, 250);
     gameLoop();
 }
 
