@@ -46,10 +46,10 @@ const warningHeight = canvas.height - 200; // Waarschuwingshoogte
 
 // Schieter
 const shooter = {
-    x: canvas.width / 2 - 25,
-    y: canvas.height - 60,
-    width: 50,
-    height: 50
+    x: canvas.width / 2 - 50,
+    y: canvas.height - 110,
+    width: 100,
+    height: 100
 };
 
 // Muis- en touchpositie
