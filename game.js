@@ -37,7 +37,7 @@ let brickOffsetY = 0;
 const brickWidth = 80;
 const brickHeight = 30;
 let boss = null;
-const bossHitsRequired = 80;
+const bossHitsRequired = 60;
 let bulletSpeed = 5; // Start kogel snelheid
 let powerupTimer = null;
 const powerupDuration = 10000; // 10 seconden
@@ -181,10 +181,12 @@ function activatePowerup() {
     powerupClone.play();
 }
 
-// Spel loop
 function gameLoop() {
     if (!isGameRunning || isPaused) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Wis canvas met witte achtergrond
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Beweeg schieter
     shooter.x = mouseX - shooter.width / 2;
@@ -264,47 +266,45 @@ function gameLoop() {
     }
 
     // Teken en update eindbaas
-if (boss && boss.visible) {
-    const bossY = boss.y + brickOffsetY; // Beweegt mee met stenen
-    if (bossImg.complete && bossImg.naturalWidth !== 0) {
-        ctx.drawImage(bossImg, boss.x, bossY, boss.width, boss.height);
-    } else {
-        console.error("Boss image failed to load");
-    }
-
-    // Check botsingen met kogels
-    bullets.forEach((bullet, bIndex) => {
-        if (bullet.x < boss.x + boss.width &&
-            bullet.x + bullet.width > boss.x &&
-            bullet.y < bossY + boss.height &&
-            bullet.y + bullet.height > bossY) {
-            bullets.splice(bIndex, 1);
-            boss.hitsLeft--;
-            let breakClone = new Audio(breakSound.src);
-            breakClone.play();
-            if (boss.hitsLeft <= 0) {
-                boss.visible = false;
-                isGameRunning = false;
-                clearInterval(bulletIntervalId);
-                document.getElementById('winMessage').style.display = 'block';
-                document.getElementById('resetButton').style.display = 'block';
-                console.log("Boss verslagen, je wint!");
-                return;
-            }
+    if (boss && boss.visible) {
+        const bossY = boss.y + brickOffsetY;
+        if (bossImg.complete && bossImg.naturalWidth !== 0) {
+            ctx.drawImage(bossImg, boss.x, bossY, boss.width, boss.height);
+        } else {
+            console.error("Boss image failed to load");
         }
-    });
 
-    // Game over als betonblok de shooter raakt
-    if (bossY + boss.height >= shooter.y) {
-        isGameRunning = false;
-        clearInterval(bulletIntervalId);
-        warningSound.pause();
-        alert(`Game Over! Score: ${score}`);
-        document.getElementById('resetButton').style.display = 'block';
-        console.log("Boss raakt shooter, game over");
-        return;
+        bullets.forEach((bullet, bIndex) => {
+            if (bullet.x < boss.x + boss.width &&
+                bullet.x + bullet.width > boss.x &&
+                bullet.y < bossY + boss.height &&
+                bullet.y + bullet.height > bossY) {
+                bullets.splice(bIndex, 1);
+                boss.hitsLeft--;
+                let breakClone = new Audio(breakSound.src);
+                breakClone.play();
+                if (boss.hitsLeft <= 0) {
+                    boss.visible = false;
+                    isGameRunning = false;
+                    clearInterval(bulletIntervalId);
+                    document.getElementById('winMessage').style.display = 'block';
+                    document.getElementById('resetButton').style.display = 'block';
+                    console.log("Boss verslagen, je wint!");
+                    return;
+                }
+            }
+        });
+
+        if (bossY + boss.height >= shooter.y) {
+            isGameRunning = false;
+            clearInterval(bulletIntervalId);
+            warningSound.pause();
+            alert(`Game Over! Score: ${score}`);
+            document.getElementById('resetButton').style.display = 'block';
+            console.log("Boss raakt shooter, game over");
+            return;
+        }
     }
-}
 
     // Update score
     document.getElementById('score').textContent = `Score: ${score}`;
@@ -319,6 +319,7 @@ if (boss && boss.visible) {
         return;
     }
 
+    // Herhaal de animatie
     requestAnimationFrame(gameLoop);
 }
 

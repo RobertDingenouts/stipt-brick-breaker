@@ -1,20 +1,18 @@
 /* Algemene stijlen */
 body {
-    background-color: #FFFFFF; /* Witte achtergrond voor de pagina */
     margin: 0;
-    padding: 20px;
-    font-family: Arial, sans-serif; /* Strakke, moderne lettertype */
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #FFFFFF !important; /* Forceer witte achtergrond */
+    font-family: 'Antonio', sans-serif;
 }
 
-/* Canvas */
 #gameCanvas {
-    background-color: #FFFFFF; /* Witte achtergrond voor het spel */
-    border: 2px solid #5A5A5A; /* Stipt-grijs voor de rand */
-    box-shadow: 0 0 10px #5A5A5A;
-    position: relative; /* Zodat winMessage hierop centreert */
+    background-color: #FFFFFF !important; /* Forceer witte achtergrond */
+    border: 2px solid #5A5A5A;
+    position: relative;
 }
 
 /* Knoppen */
