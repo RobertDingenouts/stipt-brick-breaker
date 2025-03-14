@@ -111,7 +111,7 @@ function createBoss() {
         x: 0,
         y: topBrickY,
         width: canvas.width,
-        height: 50,
+        height: 150,
         hitsLeft: bossHitsRequired,
         visible: true
     };
@@ -240,7 +240,7 @@ function gameLoop() {
                     brick.visible = false;
                     bullets.splice(bIndex, 1);
                     score += 10;
-                    if (Math.random() < 0.05) {
+                    if (Math.random() < 0.035) {
                         powerups.push(new Powerup(brick.x + brick.width / 2 - 10, drawY));
                     }
                     let breakClone = new Audio(breakSound.src);
