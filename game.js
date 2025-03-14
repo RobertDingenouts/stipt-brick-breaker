@@ -111,7 +111,7 @@ function createBoss() {
         x: 0,
         y: topBrickY,
         width: canvas.width,
-        height: 150,
+        height: 250,
         hitsLeft: bossHitsRequired,
         visible: true
     };
