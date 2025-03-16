@@ -244,6 +244,7 @@ function gameLoop() {
                         powerups.push(new Powerup(brick.x + brick.width / 2 - 10, drawY));
                     }
                     let breakClone = new Audio(breakSound.src);
+                    breakClone.volume = 0.3; // 30% volume
                     breakClone.play();
                 }
             });
@@ -257,13 +258,15 @@ function gameLoop() {
         document.getElementById('level').textContent = `Level: ${level}`;
     }
 
-    // Waarschuwingsgeluid (alleen als geen eindbaas)
-    if (isGameRunning && !boss && bricks.some(brick => brick.visible && (brick.baseY + brickOffsetY + brick.height) >= warningHeight)) {
+    // Waarschuwingsgeluid (alleen als eindbaas niet verslagen is)
+if (isGameRunning && bricks.some(brick => brick.visible && (brick.baseY + brickOffsetY + brick.height) >= warningHeight)) {
+    if (!boss || (boss && boss.visible)) { // Speel alleen als er geen eindbaas is, of als de eindbaas nog niet verslagen is
         warningSound.play();
-    } else {
-        warningSound.pause();
-        warningSound.currentTime = 0;
     }
+} else {
+    warningSound.pause();
+    warningSound.currentTime = 0;
+}
 
     // Teken en update eindbaas
     if (boss && boss.visible) {
@@ -344,7 +347,11 @@ function startGame() {
     createBoss(); // Spawn boss aan het begin
     shooter.x = canvas.width / 2 - 25;
     bulletIntervalId = setInterval(() => {
-        bullets.push(new Bullet(shooter.x + shooter.width / 2 - 5, shooter.y));
+        if (isGameRunning && !isPaused) {
+            bullets.push(new Bullet(shooter.x + shooter.width / 2 - 5, shooter.y));
+            let shootClone = new Audio(shootSound.src);
+            shootClone.play();
+        }
     }, 250);
     gameLoop();
 }
