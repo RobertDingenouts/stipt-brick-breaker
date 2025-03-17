@@ -125,9 +125,9 @@ class Powerup {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.width = 20;
-        this.height = 20;
-        this.speed = 1;
+        this.width = 40;
+        this.height = 40;
+        this.speed = 1.3;
     }
     update() {
         this.y += this.speed;
